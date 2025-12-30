@@ -2,10 +2,10 @@
 
 > Last updated: 2025-12-30
 
-## Overall Progress: 65%
+## Overall Progress: 80%
 
 ```
-[█████████████░░░░░░░] 65%
+[████████████████░░░░] 80%
 ```
 
 ---
@@ -18,9 +18,9 @@
 | Crawler   | 100%     | ✅ Ready       |
 | Cleaner   | 100%     | ✅ Ready       |
 | Tokenizer | 100%     | ✅ Ready       |
-| Ranker    | 0%       | ⬜ Not started |
+| Ranker    | 100%     | ✅ Ready       |
 | API       | 0%       | ⬜ Not started |
-| Manager   | 80%      | 🔨 In progress |
+| Manager   | 95%      | 🔨 In progress |
 
 ---
 
@@ -58,11 +58,12 @@
 -   [x] USearch integration (f16, connectivity=32, HNSW tuned)
 -   [x] tokenizer.py (batch orchestrator)
 
-### Ranker (0%)
+### Ranker (100%)
 
--   [ ] rrf.py (merge algorithm)
--   [ ] BM25 scoring
--   [ ] Vector search
+-   [x] engine.py (hybrid RRF fusion)
+-   [x] BM25 scoring (SQL CTE, high performance)
+-   [x] Vector search (USearch)
+-   [x] RRF merge (k=60)
 
 ### API (0%)
 
@@ -79,9 +80,9 @@
 -   [x] frontier command
 -   [x] reset command
 -   [x] crawl command
--   [ ] clean command (placeholder)
--   [ ] tokenize command (placeholder)
--   [ ] search command (placeholder)
+-   [x] clean command
+-   [x] tokenize command
+-   [x] search command
 
 ---
 

@@ -195,19 +195,48 @@ def tokenize(
 
 
 @app.command()
-def search(query: str = typer.Argument(..., help="Search query")):
-    """Search the index (placeholder)."""
-    console.print(Panel(
-        f"[yellow]Search not implemented yet.[/yellow]\n\n"
-        f"Query: [cyan]{query}[/cyan]\n\n"
-        "This will:\n"
-        "1. Tokenize query\n"
-        "2. Search BM25 index\n"
-        "3. Search vector index\n"
-        "4. Merge with RRF\n"
-        "5. Return ranked results",
-        title="Search"
-    ))
+def search(
+    query: str = typer.Argument(..., help="Search query"),
+    limit: int = typer.Option(10, "--limit", "-n", help="Number of results"),
+):
+    """Search using hybrid RRF (BM25 + Vector)."""
+    if not db_exists():
+        console.print("[red]Database not found. Run 'jassas init' first.[/red]")
+        raise typer.Exit(1)
+
+    # Check if we have documents
+    doc_count = Documents.get_total_count()
+    if doc_count == 0:
+        console.print("[yellow]No documents indexed. Run the pipeline first.[/yellow]")
+        raise typer.Exit(1)
+
+    console.print(f"\n[cyan]Searching:[/cyan] {query}\n")
+
+    # Initialize ranker and search
+    from ranker import Ranker
+    ranker = Ranker(verbose=True)
+    results = ranker.search(query, k=limit)
+
+    if not results:
+        console.print("[yellow]No results found.[/yellow]")
+        return
+
+    # Display results
+    table = Table(title=f"Results ({len(results)})", box=box.ROUNDED)
+    table.add_column("#", style="dim", width=3)
+    table.add_column("Score", style="magenta", width=8)
+    table.add_column("Title", style="bold white", max_width=50)
+    table.add_column("URL", style="blue")
+
+    for i, res in enumerate(results):
+        table.add_row(
+            str(i + 1),
+            f"{res['score']:.4f}",
+            (res['title'][:47] + "...") if len(res['title']) > 50 else res['title'],
+            res['url']
+        )
+
+    console.print(table)
 
 
 @app.command()
