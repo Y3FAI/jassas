@@ -8,6 +8,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from typing import List, Dict
+from concurrent.futures import ThreadPoolExecutor
 import numpy as np
 from usearch.index import Index
 from sentence_transformers import SentenceTransformer
@@ -79,9 +80,15 @@ class Ranker:
         # Normalize query (same as indexing)
         normalized_query = self.parser._normalize(query)
 
-        # 1. Execute both searches
-        bm25_results = self._bm25_search(normalized_query, limit=50)
-        vector_results = self._vector_search(query, limit=50)  # Use original for embeddings
+        # 1. Execute both searches in parallel
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            # BM25 is I/O bound (SQLite)
+            future_bm25 = executor.submit(self._bm25_search, normalized_query, 50)
+            # Vector is CPU bound (matrix math)
+            future_vector = executor.submit(self._vector_search, query, 50)
+
+            bm25_results = future_bm25.result()
+            vector_results = future_vector.result()
 
         # 2. RRF Merge
         merged_scores: Dict[int, float] = {}

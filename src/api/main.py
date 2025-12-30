@@ -57,7 +57,7 @@ def generate_snippet(text: str, length: int = 200) -> str:
     return text[:length] + "..."
 
 
-async def execute_search(request: Request, query: str, limit: int) -> SearchResponse:
+def execute_search(request: Request, query: str, limit: int) -> SearchResponse:
     """Core search logic shared by GET and POST endpoints."""
     start_time = time.perf_counter()
 
@@ -94,17 +94,17 @@ async def execute_search(request: Request, query: str, limit: int) -> SearchResp
 
 
 @app.post("/api/v1/search", response_model=SearchResponse)
-async def search_post(request: Request, payload: SearchRequest):
+def search_post(request: Request, payload: SearchRequest):
     """Search endpoint (POST) - for programmatic use."""
-    return await execute_search(request, payload.query, payload.limit)
+    return execute_search(request, payload.query, payload.limit)
 
 
 @app.get("/api/v1/search", response_model=SearchResponse)
-async def search_get(request: Request, q: str, limit: int = 10):
+def search_get(request: Request, q: str, limit: int = 10):
     """Search endpoint (GET) - browser friendly."""
     if len(q) < 2:
         raise HTTPException(status_code=400, detail="Query must be at least 2 characters")
-    return await execute_search(request, q, min(limit, 50))
+    return execute_search(request, q, min(limit, 50))
 
 
 @app.get("/health")
