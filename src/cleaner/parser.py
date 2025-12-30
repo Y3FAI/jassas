@@ -98,6 +98,14 @@ class Parser:
         # Unify Yeh: ى (alef maksura) → ي
         text = re.sub(r'ى', 'ي', text)
 
+        # Strip Arabic definite article (ال) with length guard
+        # Only strip from words > 4 chars to protect roots like الله, الا
+        # "السيبراني" (9 chars) → "سيبراني" ✓
+        # "الله" (4 chars) → "الله" (protected) ✓
+        words = text.split()
+        words = [re.sub(r'^ال', '', w) if w.startswith('ال') and len(w) > 4 else w for w in words]
+        text = ' '.join(words)
+
         # Collapse whitespace
         text = re.sub(r'\s+', ' ', text).strip()
 
