@@ -1,6 +1,6 @@
 # Jassas Search Engine - Big Picture
 
-> A hybrid search engine for mygov.sa (Saudi Government Services Portal)
+> High performance search engine.
 
 ## System Architecture
 
@@ -39,21 +39,21 @@ USER QUERY ──▶ RANKER ◀────────────────�
 
 ## Pipeline Summary
 
-| Service     | Role                              |
-|-------------|-----------------------------------|
-| **Manager** | CLI to control all services       |
-| **Crawler** | Fetch HTML from mygov.sa          |
-| **Cleaner** | Strip HTML, normalize text        |
+| Service       | Role                            |
+| ------------- | ------------------------------- |
+| **Manager**   | CLI to control all services     |
+| **Crawler**   | Fetch HTML from mygov.sa        |
+| **Cleaner**   | Strip HTML, normalize text      |
 | **Tokenizer** | BM25 tokens + Vector embeddings |
-| **Ranker**  | Query & score results (RRF)       |
-| **API**     | Serve results to users            |
+| **Ranker**    | Query & score results (RRF)     |
+| **API**       | Serve results to users          |
 
 ## Core Principles
 
-- Each service runs independently
-- Shared DB is the only coupling
-- Start with SQLite, design for migration
-- Stop/Resume capability for all services
+-   Each service runs independently
+-   Shared DB is the only coupling
+-   Start with SQLite, design for migration
+-   Stop/Resume capability for all services
 
 ---
 
@@ -79,10 +79,11 @@ Central control point for all services.
 ```
 
 ### Responsibilities:
-- Start/stop individual services
-- Monitor service health
-- View statistics (pages crawled, indexed, etc.)
-- CLI first, web later
+
+-   Start/stop individual services
+-   Monitor service health
+-   View statistics (pages crawled, indexed, etc.)
+-   CLI first, web later
 
 ---
 
@@ -133,15 +134,17 @@ pages table (The Archive):
 ```
 
 ### Rules (Politeness):
-- Respect robots.txt
-- Rate limit requests
-- Track visited URLs (no duplicates)
-- Handle errors gracefully
+
+-   Respect robots.txt
+-   Rate limit requests
+-   Track visited URLs (no duplicates)
+-   Handle errors gracefully
 
 ### Key Features:
-- Queue lives in DB (stop/resume works)
-- BFS via depth column (process shallow first)
-- IN_PROGRESS status (handles crashes mid-fetch)
+
+-   Queue lives in DB (stop/resume works)
+-   BFS via depth column (process shallow first)
+-   IN_PROGRESS status (handles crashes mid-fetch)
 
 ---
 
@@ -184,14 +187,16 @@ documents table:
 ```
 
 ### Cleaner Does:
-- Strip HTML noise
-- Extract readable text
-- Normalize encoding/whitespace
+
+-   Strip HTML noise
+-   Extract readable text
+-   Normalize encoding/whitespace
 
 ### Cleaner Does NOT:
-- Tokenization
-- Index building
-- Ranking logic
+
+-   Tokenization
+-   Index building
+-   Ranking logic
 
 ---
 
@@ -223,16 +228,18 @@ Dual-brain processing: BM25 (lexical) + Vector (semantic).
 ```
 
 ### Path A: BM25 Track (Lexical)
-- **Action:** Tokenize, Stem, Remove Stopwords
-- **Output:** `["renew", "passport", "riyadh"]`
-- **Destination:** SQLite (Inverted Index Table)
-- **Purpose:** Exact keyword matches
+
+-   **Action:** Tokenize, Stem, Remove Stopwords
+-   **Output:** `["renew", "passport", "riyadh"]`
+-   **Destination:** SQLite (Inverted Index Table)
+-   **Purpose:** Exact keyword matches
 
 ### Path B: Vector Track (Semantic)
-- **Action:** Pass text to Embedding Model (all-MiniLM-L6-v2)
-- **Output:** `[0.12, -0.45, 0.88, ...]` (384-dimensional vector)
-- **Destination:** USearch Index (.usearch file)
-- **Purpose:** Concept matches (semantic similarity)
+
+-   **Action:** Pass text to Embedding Model (all-MiniLM-L6-v2)
+-   **Output:** `[0.12, -0.45, 0.88, ...]` (384-dimensional vector)
+-   **Destination:** USearch Index (.usearch file)
+-   **Purpose:** Concept matches (semantic similarity)
 
 ### DB Schema:
 
@@ -288,14 +295,16 @@ score = Σ 1/(k + rank)
 ```
 
 Where:
-- `k = 60` (constant)
-- `rank` = position in each result list
+
+-   `k = 60` (constant)
+-   `rank` = position in each result list
 
 ### Why RRF:
-- Simple formula
-- No tuning required
-- Industry standard for hybrid search
-- Combines best of both worlds
+
+-   Simple formula
+-   No tuning required
+-   Industry standard for hybrid search
+-   Combines best of both worlds
 
 ---
 
@@ -319,10 +328,11 @@ Serves search results to users.
 ```
 
 ### Responsibilities:
-- Accept search queries
-- Return ranked results
-- Serve document details
-- Health check endpoint
+
+-   Accept search queries
+-   Return ranked results
+-   Serve document details
+-   Health check endpoint
 
 ---
 
@@ -348,9 +358,10 @@ Shared storage for all services.
 ```
 
 ### Design Principles:
-- Start with SQLite (zero cost, portable)
-- Design for PostgreSQL migration
-- USearch for vector storage (lightweight, fast)
+
+-   Start with SQLite (zero cost, portable)
+-   Design for PostgreSQL migration
+-   USearch for vector storage (lightweight, fast)
 
 ---
 
@@ -361,9 +372,10 @@ Shared storage for all services.
 **Value:** Official government documentation for services, costs, requirements.
 
 **Example Use Cases:**
-- "How to renew passport"
-- "Cost of business license"
-- "Requirements for work visa"
+
+-   "How to renew passport"
+-   "Cost of business license"
+-   "Requirements for work visa"
 
 ---
 
