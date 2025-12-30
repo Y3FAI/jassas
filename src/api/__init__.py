@@ -1,1 +1,3 @@
-# API service
+"""
+Jassas Search API - FastAPI server.
+"""

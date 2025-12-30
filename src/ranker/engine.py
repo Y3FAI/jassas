@@ -188,6 +188,7 @@ class Ranker:
                     'score': scores[doc_id],
                     'title': doc['title'],
                     'url': doc['url'],
+                    'clean_text': doc.get('clean_text', ''),
                 })
 
         return results

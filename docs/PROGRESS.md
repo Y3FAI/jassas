@@ -2,10 +2,10 @@
 
 > Last updated: 2025-12-30
 
-## Overall Progress: 80%
+## Overall Progress: 95%
 
 ```
-[████████████████░░░░] 80%
+[███████████████████░] 95%
 ```
 
 ---
@@ -19,8 +19,8 @@
 | Cleaner   | 100%     | ✅ Ready       |
 | Tokenizer | 100%     | ✅ Ready       |
 | Ranker    | 100%     | ✅ Ready       |
-| API       | 0%       | ⬜ Not started |
-| Manager   | 95%      | 🔨 In progress |
+| API       | 100%     | ✅ Ready       |
+| Manager   | 100%     | ✅ Ready       |
 
 ---
 
@@ -65,13 +65,17 @@
 -   [x] Vector search (USearch)
 -   [x] RRF merge (k=60)
 
-### API (0%)
+### API (100%)
 
--   [ ] server.py
--   [ ] Search endpoint
--   [ ] Health endpoint
+-   [x] main.py (FastAPI + lifespan)
+-   [x] schemas.py (Pydantic models)
+-   [x] GET /api/v1/search (browser friendly)
+-   [x] POST /api/v1/search (programmatic)
+-   [x] GET /health (status check)
+-   [x] CORS middleware
+-   [x] Snippet generation
 
-### Manager (80%)
+### Manager (100%)
 
 -   [x] cli.py (typer + rich)
 -   [x] init command
