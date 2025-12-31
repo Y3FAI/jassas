@@ -16,15 +16,15 @@ Jassas is a production-grade search engine that combines **lexical (BM25)** and 
 
 What makes Jassas unique:
 
-1. **Hybrid Accuracy**: Combines BM25 (catches exact matches) + Multilingual-E5-Large embeddings (understands meaning) via RRF. This dual approach achieves **1.0 MRR** (first result is always relevant) on Arabic government queries.
+> 1.  **Hybrid Accuracy**: Combines BM25 (catches exact matches) + Multilingual-E5-Large embeddings (understands meaning) via RRF. This dual approach achieves **1.0 MRR** (first result is always relevant) on Arabic government queries.
 
-2. **Speed Without Compromise**: Using NumPy sparse matrices instead of SQL, BM25 scores 10,000 documents in **2-3ms**. Combined with vector search, end-to-end latency is **40ms**—fast enough for real-time web search without sacrificing accuracy.
+> 2.  **Speed Without Compromise**: Using NumPy sparse matrices instead of SQL, BM25 scores 10,000 documents in **2-3ms**. Combined with vector search, end-to-end latency is **40ms**—fast enough for real-time web search without sacrificing accuracy.
 
-3. **General-Purpose Design**: No domain-specific rules or hardcoded boilerplate detection. The same system works for Arabic government services, e-commerce, medical docs, or any corpus in 100+ languages.
+> 3.  **General-Purpose Design**: No domain-specific rules or hardcoded boilerplate detection. The same system works for Arabic government services, e-commerce, medical docs, or any corpus in 100+ languages.
 
-4. **Simple Infrastructure**: Single SQLite database + USearch vector index. Runs on a standard machine (180MB total for 10k docs). No Elasticsearch, no microservices, no DevOps complexity.
+> 4.  **Simple Infrastructure**: Single SQLite database + USearch vector index. Runs on a standard machine (180MB total for 10k docs). No Elasticsearch, no microservices, no DevOps complexity.
 
-5. **Proven Accuracy**: 82% A-grade relevance score (LLM-as-judge), 93% success rate on real questions, 50.7% precision@10.
+> 5.  **Proven Accuracy**: 82% A-grade relevance score (LLM-as-judge), 93% success rate on real questions, 50.7% precision@10.
 
 ---
 
