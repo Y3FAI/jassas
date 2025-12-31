@@ -43,16 +43,16 @@ def single_request(query: str) -> dict:
 
 
 def run_api_benchmarks():
-    console.print("\n[bold cyan]🌐 Jassas API Benchmarking Suite[/bold cyan]\n")
+    console.print("\n[bold cyan]Jassas API Benchmarking Suite[/bold cyan]\n")
 
     # Check if API is running
     try:
         resp = requests.get(f"{API_URL}/health", timeout=5)
         if resp.status_code != 200:
             raise Exception("API not healthy")
-        console.print(f"[green]✓ API is running at {API_URL}[/green]\n")
+        console.print(f"[green]OK API is running at {API_URL}[/green]\n")
     except Exception as e:
-        console.print(f"[red]✗ API not reachable at {API_URL}[/red]")
+        console.print(f"[red]FAIL API not reachable at {API_URL}[/red]")
         console.print("[dim]Start the API with: uvicorn src.api.main:app --port 8000[/dim]")
         return
 

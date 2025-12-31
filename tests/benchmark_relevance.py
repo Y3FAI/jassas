@@ -202,10 +202,10 @@ def calculate_precision_at_k(scores: List[int], k: int = 10) -> float:
 
 
 def run_relevance_benchmark():
-    console.print("\n[bold cyan]⚖️  Jassas Relevance Benchmark (LLM-as-a-Judge)[/bold cyan]\n")
+    console.print("\n[bold cyan]Jassas Relevance Benchmark (LLM-as-a-Judge)[/bold cyan]\n")
 
     if not OPENROUTER_API_KEY:
-        console.print("[red]❌ Set OPENROUTER_API_KEY environment variable[/red]")
+        console.print("[red]FAIL Set OPENROUTER_API_KEY environment variable[/red]")
         console.print("[dim]export OPENROUTER_API_KEY='your-key-here'[/dim]")
         return
 
@@ -216,7 +216,7 @@ def run_relevance_benchmark():
     console.print("[yellow]Loading search engine...[/yellow]")
     ranker = Ranker(verbose=False)
     ranker._load_vector_engine()
-    console.print("[green]✓ Engine ready[/green]\n")
+    console.print("[green]OK Engine ready[/green]\n")
 
     # Results table
     table = Table(title="Relevance Scores by Query", box=box.ROUNDED)

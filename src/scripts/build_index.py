@@ -119,7 +119,7 @@ def build_index():
             data.append(freq)
 
         if not data:
-            print("[red]❌ No index entries found.[/red]")
+            print("[red]FAIL No index entries found.[/red]")
             sys.exit(1)
 
         # CSR Matrix: (vocab_size, num_docs)

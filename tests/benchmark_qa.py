@@ -147,10 +147,10 @@ def evaluate_question(question: str, results: List[dict]) -> Dict:
 
 
 def run_qa_benchmark():
-    console.print("\n[bold cyan]📋 Jassas QA Benchmark (Task Completion)[/bold cyan]\n")
+    console.print("\n[bold cyan]Jassas QA Benchmark (Task Completion)[/bold cyan]\n")
 
     if not OPENROUTER_API_KEY:
-        console.print("[red]❌ Set OPENROUTER_API_KEY environment variable[/red]")
+        console.print("[red]FAIL Set OPENROUTER_API_KEY environment variable[/red]")
         return
 
     console.print(f"[dim]Judges: {', '.join(j.split('/')[1].split(':')[0] for j in JUDGES)}[/dim]")
@@ -161,7 +161,7 @@ def run_qa_benchmark():
     console.print("[yellow]Loading search engine...[/yellow]")
     ranker = Ranker(verbose=False)
     ranker._load_vector_engine()
-    console.print("[green]✓ Engine ready[/green]\n")
+    console.print("[green]OK Engine ready[/green]\n")
 
     # Results table
     table = Table(title="Question Answerability", box=box.ROUNDED)
@@ -207,7 +207,7 @@ def run_qa_benchmark():
 
         for k in [1, 3, 5, 10]:
             k_key = f"top_{k}"
-            decision = "[green]✓[/green]" if k_scores[k_key] else "[red]✗[/red]"
+            decision = "[green]OK[/green]" if k_scores[k_key] else "[red]FAIL[/red]"
             row = [str(k), decision]
 
             for judge_name in JUDGES:
@@ -231,7 +231,7 @@ def run_qa_benchmark():
 
         # Format row for summary table
         def fmt(k):
-            return "[green]✓[/green]" if k_scores.get(k, False) else "[red]✗[/red]"
+            return "[green]OK[/green]" if k_scores.get(k, False) else "[red]FAIL[/red]"
 
         table.add_row(
             question[:35],

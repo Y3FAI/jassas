@@ -373,11 +373,11 @@ def benchmark(
         console.print(f"\n[bold cyan]Running {test_name} benchmark...[/bold cyan]\n")
         result = subprocess.run([sys.executable, test_file], env=env)
         if result.returncode != 0:
-            console.print(f"[red]❌ {test_name} benchmark failed[/red]")
+            console.print(f"[red]FAIL {test_name} benchmark failed[/red]")
             raise typer.Exit(result.returncode)
 
     if len(tests) > 1:
-        console.print(f"\n[bold green]✓ All benchmarks completed[/bold green]")
+        console.print(f"\n[bold green]OK All benchmarks completed[/bold green]")
 
 
 @app.command()

@@ -19,17 +19,17 @@ from api.schemas import SearchRequest, SearchResponse, SearchResult
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Load Ranker on startup, cleanup on shutdown."""
-    print("🚀 Starting Jassas Search API...")
+    print("Starting Jassas Search API...")
     try:
         app.state.ranker = Ranker(verbose=True)
-        print("✅ Ranker loaded successfully")
+        print("OK Ranker loaded successfully")
     except Exception as e:
-        print(f"❌ Failed to load Ranker: {e}")
+        print(f"FAIL Failed to load Ranker: {e}")
         raise
 
     yield
 
-    print("🛑 Shutting down Jassas Search API")
+    print("Shutting down Jassas Search API")
 
 
 app = FastAPI(

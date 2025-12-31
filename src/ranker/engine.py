@@ -47,7 +47,7 @@ class Ranker:
             index_path=os.path.join(DATA_DIR, 'bm25_matrix.pkl')
         )
         if not self.bm25_engine.load():
-            self._log("[yellow]⚠️  BM25 matrix index not found. Run: python src/scripts/build_index.py[/yellow]")
+            self._log("[yellow]BM25 matrix index not found. Run: python src/scripts/build_index.py[/yellow]")
 
         # Pre-load stats (for legacy compatibility)
         self.total_docs = 0
@@ -129,7 +129,7 @@ class Ranker:
         """
         # Check if BM25 engine loaded successfully
         if self.bm25_engine.term_matrix is None:
-            self._log("[yellow]⚠️  BM25 index not loaded. Using vector search fallback.[/yellow]")
+            self._log("[yellow]BM25 index not loaded. Using vector search fallback.[/yellow]")
             return []
 
         # Tokenize query (same as indexing)

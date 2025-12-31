@@ -62,7 +62,7 @@ def save_results(results):
 
 def print_header():
     print("\n" + "="*60)
-    print("       📋 JASSAS HUMAN EVALUATION BENCHMARK")
+    print("       JASSAS HUMAN EVALUATION BENCHMARK")
     print("="*60)
 
 
@@ -71,7 +71,7 @@ def print_results(question: str, results: list, q_num: int, total: int):
     clear_screen()
     print_header()
     print(f"\n[Question {q_num}/{total}]")
-    print(f"\n🔍 Query: {question}")
+    print(f"\nQuery: {question}")
     print("\n" + "-"*60)
     print("Search Results:")
     print("-"*60)
@@ -143,7 +143,7 @@ def print_summary(summary):
     """Print evaluation summary."""
     clear_screen()
     print_header()
-    print("\n📊 EVALUATION SUMMARY")
+    print("\nEVALUATION SUMMARY")
     print("="*60)
 
     if not summary:
@@ -242,7 +242,7 @@ def main():
     print("\nLoading search engine...")
     ranker = Ranker(verbose=False)
     ranker._load_vector_engine()
-    print("✓ Ready")
+    print("OK Ready")
 
     while True:
         print("\n" + "-"*40)

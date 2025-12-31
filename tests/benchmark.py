@@ -71,7 +71,7 @@ class ProfiledRanker(Ranker):
 
 
 def run_benchmarks():
-    console.print("\n[bold cyan]🔥 Jassas Benchmarking Suite[/bold cyan]\n")
+    console.print("\n[bold cyan]Jassas Benchmarking Suite[/bold cyan]\n")
 
     # --- Test 1: Cold Start ---
     console.print("[bold yellow]1. Measuring Cold Start...[/bold yellow]")
