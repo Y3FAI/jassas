@@ -1,5 +1,7 @@
 # Jassas - High-Performance Hybrid Search Engine
 
+![Jassas Header](docs/img.png)
+
 Jassas is a production-grade search engine that combines **lexical (BM25)** and **semantic (embeddings)** search using **Reciprocal Rank Fusion (RRF)**. Built for **speed, accuracy, and scalability** on any domain.
 
 ## The Story
