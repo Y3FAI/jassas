@@ -239,11 +239,37 @@ def tokenize(
 
 
 @app.command()
+def build_index():
+    """Build NumPy BM25 matrix index from tokenized documents."""
+    if not db_exists():
+        console.print("[red]Database not found. Run 'jassas init' first.[/red]")
+        raise typer.Exit(1)
+
+    # Check if there are tokenized documents
+    with get_db() as conn:
+        cursor = conn.execute("SELECT COUNT(*) FROM documents WHERE status = 'tokenized'")
+        tokenized_count = cursor.fetchone()[0]
+
+    if tokenized_count == 0:
+        console.print("[yellow]No tokenized documents found. Run 'jassas tokenize' first.[/yellow]")
+        raise typer.Exit(1)
+
+    console.print(f"\n[bold cyan]Building NumPy BM25 Index[/bold cyan]\n")
+
+    from scripts.build_index import build_index as build_bm25_index
+    try:
+        build_bm25_index()
+    except Exception as e:
+        console.print(f"[red]Error building index: {e}[/red]")
+        raise typer.Exit(1)
+
+
+@app.command()
 def search(
     query: str = typer.Argument(..., help="Search query"),
     limit: int = typer.Option(10, "--limit", "-n", help="Number of results"),
 ):
-    """Search using hybrid RRF (BM25 + Vector)."""
+    """Search using hybrid RRF (NumPy BM25 + Vector Embeddings)."""
     if not db_exists():
         console.print("[red]Database not found. Run 'jassas init' first.[/red]")
         raise typer.Exit(1)
@@ -252,6 +278,13 @@ def search(
     doc_count = Documents.get_total_count()
     if doc_count == 0:
         console.print("[yellow]No documents indexed. Run the pipeline first.[/yellow]")
+        raise typer.Exit(1)
+
+    # Check if BM25 index exists
+    import os
+    bm25_index_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'data', 'bm25_matrix.pkl')
+    if not os.path.exists(bm25_index_path):
+        console.print("[yellow]BM25 index not found. Run 'jassas build-index' first.[/yellow]")
         raise typer.Exit(1)
 
     console.print(f"\n[cyan]Searching:[/cyan] {query}\n")

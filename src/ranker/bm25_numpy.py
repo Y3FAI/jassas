@@ -4,6 +4,8 @@ Replaces SQL-based search with Linear Algebra.
 
 Performance: 2-3ms per query on 10k docs (constant time, not dependent on corpus size)
 Memory: 100MB for 10k docs (CSR sparse matrix)
+
+FIXED: Removed aggressive IDF filtering that caused relevance regression.
 """
 import os
 import pickle
@@ -45,19 +47,16 @@ class NumPyBM25Engine:
             self.avgdl = data['avgdl']
             return True
         except Exception as e:
-            print(f"[red]Failed to load BM25 index: {e}[/red]")
+            print(f"Failed to load BM25 index: {e}")
             return False
 
-    def search(self, token_ids: List[int], k: int = 50, df_threshold: float = 0.90) -> List[Tuple[int, float]]:
+    def search(self, token_ids: List[int], k: int = 50) -> List[Tuple[int, float]]:
         """
         Execute BM25 search using vectorized numpy operations.
 
         Args:
             token_ids: List of vocab IDs from tokenizer
             k: Return top-k results
-            df_threshold: Document frequency threshold (0-1). Skip terms appearing in >threshold% of docs.
-                         Default 0.90 = skip boilerplate in 90%+ of corpus.
-                         Domain-agnostic: works for any domain.
 
         Returns:
             List of (doc_id, score) tuples, sorted by score descending
@@ -70,25 +69,18 @@ class NumPyBM25Engine:
         query_idfs = []
 
         for tid in token_ids:
-            # Translate vocab_id -> matrix row index
+            # Map vocab_id to matrix row index
             if tid not in self.vocab_id_map:
                 continue
 
             row_idx = self.vocab_id_map[tid]
             idf = self.vocab_idf[row_idx]
 
-            # Auto-Prune: Skip boilerplate terms based on document frequency percentage
-            # If term appears in >90% of corpus, it's information-theoretically useless
-            # This is domain-agnostic and scales to any domain
-
-            # Get document frequency from sparse matrix
-            df_count = self.term_matrix.getrow(row_idx).nnz  # Non-zero count = doc frequency
-            df_percent = df_count / len(self.doc_ids)
-
-            if df_percent > df_threshold:
-                # Skip boilerplate: this term is in most documents
-                continue
-
+            # CRITICAL FIX: Do not filter low-IDF terms.
+            # In domain-specific search, common words (like "Service") are vital.
+            # BM25 math handles the weighting naturally.
+            # The previous aggressive filtering (if idf > 0.1) caused relevance regression
+            # by removing essential domain terms.
             query_rows.append(row_idx)
             query_idfs.append(idf)
 
@@ -128,7 +120,7 @@ class NumPyBM25Engine:
         final_scores = term_scores.sum(axis=0)
 
         # 5. Top-K Selection (Optimized)
-        if len(final_scores) <= k:
+        if k >= len(final_scores):
             # Small result set: just sort all
             top_indices = np.argsort(final_scores)[::-1]
         else:
@@ -143,7 +135,9 @@ class NumPyBM25Engine:
         for idx in top_indices:
             score = float(final_scores[idx])
             if score > 0:
-                doc_id = self.doc_ids[idx]
+                # EXPLICIT CAST: Ensure doc_id is a native Python int, not numpy.int64
+                # This prevents issues with SQLite/Postgres adapters
+                doc_id = int(self.doc_ids[idx])
                 results.append((doc_id, score))
 
         return results
