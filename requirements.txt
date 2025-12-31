@@ -25,5 +25,6 @@ python-dotenv>=1.0.0
 
 requests==2.31.0            # For crawling web pages
 cloudscraper>=1.2.71        # CloudFlare bypass
-numpy==1.26.4             # For math operations
-rich==13.7.1              # For pretty CLI output (The "Manager")
+numpy==1.26.4               # For math operations
+scipy>=1.10.0               # For sparse matrices (BM25 engine)
+rich==13.7.1                # For pretty CLI output (The "Manager")

@@ -2,9 +2,10 @@
 .env
 .env.local
 
-# Data
+# Data & Indices
 data/
 .urls
+*.pkl  # BM25 matrix index (regenerated from pipeline)
 
 # Python
 __pycache__/
