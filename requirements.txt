@@ -4,8 +4,8 @@
 beautifulsoup4>=4.12.3
 lxml>=5.0.0
 
-# Embeddings (for vector search)
-sentence-transformers>=3.0.0
+# Embeddings (for vector search) - FastEmbed for ONNX speed
+fastembed>=0.4.0
 
 # Vector Index (lightweight, fast)
 usearch>=2.9.0

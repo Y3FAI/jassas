@@ -11,7 +11,7 @@ from typing import List, Dict
 from concurrent.futures import ThreadPoolExecutor
 import numpy as np
 from usearch.index import Index
-from sentence_transformers import SentenceTransformer
+from fastembed import TextEmbedding
 
 from db import Documents, Vocab
 from db.connection import get_db
@@ -69,7 +69,7 @@ class Ranker:
         """Lazy load vector model and index."""
         if self.vector_model is None:
             self._log("Loading vector model...")
-            self.vector_model = SentenceTransformer(VectorEngine.MODEL_NAME)
+            self.vector_model = TextEmbedding(VectorEngine.MODEL_NAME)
 
         if self.vector_index is None and os.path.exists(INDEX_PATH):
             self._log("Loading vector index...")
@@ -188,7 +188,7 @@ class Ranker:
 
         # Encode query
         start = time.perf_counter()
-        embedding = self.vector_model.encode(query).astype(np.float16)
+        embedding = list(self.vector_model.embed([query]))[0].astype(np.float16)
         encode_time = (time.perf_counter() - start) * 1000
 
         # Search

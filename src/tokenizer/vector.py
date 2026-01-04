@@ -1,10 +1,11 @@
 """
 Vector Engine - Generates embeddings and manages USearch index.
+Uses FastEmbed (ONNX) for fast CPU inference.
 """
 import os
 from typing import List, Tuple
 import numpy as np
-from sentence_transformers import SentenceTransformer
+from fastembed import TextEmbedding
 from usearch.index import Index
 
 
@@ -16,7 +17,7 @@ INDEX_PATH = os.path.join(DATA_DIR, 'vectors.usearch')
 class VectorEngine:
     """Generates embeddings and manages vector index."""
 
-    # Model config
+    # Model config - FastEmbed model name
     MODEL_NAME = 'intfloat/multilingual-e5-large'
     DIMENSIONS = 1024
 
@@ -36,9 +37,9 @@ class VectorEngine:
         self.index = None
 
     def load_model(self):
-        """Load the sentence transformer model."""
+        """Load the FastEmbed model."""
         if self.model is None:
-            self.model = SentenceTransformer(self.MODEL_NAME)
+            self.model = TextEmbedding(self.MODEL_NAME)
 
     def create_index(self):
         """Create a new USearch index."""
@@ -60,19 +61,16 @@ class VectorEngine:
     def encode(self, texts: List[str]) -> np.ndarray:
         """Generate embeddings for texts."""
         self.load_model()
-        return self.model.encode(texts, show_progress_bar=False)
+        # FastEmbed returns generator, convert to numpy
+        embeddings = list(self.model.embed(texts))
+        return np.array(embeddings)
 
     def encode_batch(self, texts: List[str]) -> np.ndarray:
         """Generate embeddings in batches."""
         self.load_model()
-
-        all_embeddings = []
-        for i in range(0, len(texts), self.batch_size):
-            batch = texts[i:i + self.batch_size]
-            embeddings = self.model.encode(batch, show_progress_bar=False)
-            all_embeddings.append(embeddings)
-
-        return np.vstack(all_embeddings)
+        # FastEmbed handles batching internally
+        embeddings = list(self.model.embed(texts))
+        return np.array(embeddings)
 
     def add_documents(self, doc_ids: List[int], texts: List[str]):
         """
