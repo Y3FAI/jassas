@@ -4,27 +4,22 @@
 
 {% block content %}
 <main class="home">
-    <div class="home-container">
-        <!-- Logo -->
-        <div class="logo">
-            <h1>جساس</h1>
-            <p class="tagline">محرك بحث الخدمات الحكومية</p>
-        </div>
+    <div class="logo">جساس</div>
 
-        <!-- Search Box -->
-        <form class="search-form" action="/search" method="GET">
+    <div class="search-wrapper">
+        <form action="/search" method="GET">
             <div class="search-box">
+                <svg class="search-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
                 <input
                     type="text"
                     name="q"
                     class="search-input"
-                    placeholder="ابحث هنا..."
+                    placeholder="عن ماذا تبحث؟"
                     autocomplete="off"
                     autofocus
                 >
-                <button type="submit" class="search-button">
-                    بحث
-                </button>
             </div>
         </form>
     </div>

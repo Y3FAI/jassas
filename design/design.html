@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search - Subtle Glass</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+      background: linear-gradient(135deg, #0a0a0f 0%, #1a1a24 50%, #0f0f18 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .logo {
+      font-size: 3.5rem;
+      font-weight: 600;
+      letter-spacing: -0.04em;
+      color: #f0f0f0;
+      margin-bottom: 3.5rem;
+      text-align: center;
+    }
+
+    .search-wrapper {
+      width: 100%;
+      max-width: 40rem;
+    }
+
+    .search-box {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(16px);
+      border-radius: 3rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+      padding: 1rem 1.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.875rem;
+      transition: all 0.3s ease;
+    }
+
+    .search-box:focus-within {
+      background: rgba(255, 255, 255, 0.05);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 0 2px rgba(255, 255, 255, 0.05);
+      transform: translateY(-2px);
+    }
+
+    .search-icon {
+      width: 1.375rem;
+      height: 1.375rem;
+      color: #a1a1aa;
+      flex-shrink: 0;
+    }
+
+    .search-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 1.0625rem;
+      color: #f0f0f0;
+    }
+
+    .search-input::placeholder {
+      color: #71717a;
+    }
+
+    @media (max-width: 768px) {
+      .logo {
+        font-size: 2.5rem;
+        margin-bottom: 2.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="logo">Search</div>
+  
+  <div class="search-wrapper">
+    <div class="search-box">
+      <svg class="search-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+      <input type="text" class="search-input" placeholder="What are you looking for?" aria-label="Search">
+    </div>
+  </div>
+</body>
+</html>
